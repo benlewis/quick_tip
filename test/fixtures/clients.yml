@@ -1,7 +1,9 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
 
 one:
-  name: MyString
+  name: Golden Gate Disc Golf
+  qt_pct: 0.05
 
 two:
-  name: MyString
+  name: Ben's Couch
+  qt_pct: 0.10

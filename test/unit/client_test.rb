@@ -1,7 +1,9 @@
 require 'test_helper'
 
 class ClientTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
+
+  test "can create clients" do
+    puts Client.all.map(&:name)
+  end
+
 end

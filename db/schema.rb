@@ -14,9 +14,10 @@
 ActiveRecord::Schema.define(:version => 20130225082351) do
 
   create_table "clients", :force => true do |t|
-    t.string   "name"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.string   "name",       :limit => 35,                   :null => false
+    t.decimal  "qt_pct",                   :default => 0.05, :null => false
+    t.datetime "created_at",                                 :null => false
+    t.datetime "updated_at",                                 :null => false
   end
 
   create_table "fake_payout_vehicles", :force => true do |t|
