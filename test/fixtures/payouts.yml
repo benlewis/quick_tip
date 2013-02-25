@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  client: 
+  total_cents: 1
+  status: MyString
+
+two:
+  client: 
+  total_cents: 1
+  status: MyString

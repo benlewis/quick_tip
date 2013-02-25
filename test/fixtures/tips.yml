@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  references: 
+  total_cents: 1
+  processing_fees_cents: 1
+  qt_cents: 1
+  client_cents: 1
+  status: MyString
+
+two:
+  references: 
+  total_cents: 1
+  processing_fees_cents: 1
+  qt_cents: 1
+  client_cents: 1
+  status: MyString
