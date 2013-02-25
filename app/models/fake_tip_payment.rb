@@ -16,7 +16,7 @@ class FakeTipPayment < ActiveRecord::Base
 
     Tip.create!(
       :total_cents => total_cents,
-      :processing_fees_cents = processing_fees_cents,
+      :processing_fees_cents => processing_fees_cents,
       :payment => fake_tip_payment
     )
   end

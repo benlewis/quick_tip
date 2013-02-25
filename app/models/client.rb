@@ -1,8 +1,8 @@
 class Client < ActiveRecord::Base
   has_many :monthly_client_data
   has_many :users
-  has_many :tips, :scope => where(:status => 'valid')
-  has_many :payouts, :scope => where(:status => 'valid')
+  has_many :tips, :conditions => { :status => 'valid' }
+  has_many :payouts, :conditions => { :status => 'valid' }
 
   attr_accessible :name
 
