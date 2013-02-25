@@ -15,10 +15,14 @@ ActiveRecord::Schema.define(:version => 20130225082351) do
 
   create_table "clients", :force => true do |t|
     t.string   "name",       :limit => 35,                   :null => false
-    t.decimal  "qt_pct",                   :default => 0.05, :null => false
+    t.string   "short_name", :limit => 10,                   :null => false
+    t.float    "qt_pct",                   :default => 0.05, :null => false
     t.datetime "created_at",                                 :null => false
     t.datetime "updated_at",                                 :null => false
   end
+
+  add_index "clients", ["name"], :name => "index_clients_on_name", :unique => true
+  add_index "clients", ["short_name"], :name => "index_clients_on_short_name", :unique => true
 
   create_table "fake_payout_vehicles", :force => true do |t|
     t.string   "code",       :limit => 32, :null => false
