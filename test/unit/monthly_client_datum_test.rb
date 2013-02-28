@@ -45,6 +45,10 @@ class MonthlyClientDataTest < ActiveSupport::TestCase
     assert_equal 1, monthly_client_datum.total_payouts_count
     assert_equal 75, monthly_client_datum.total_payouts_cents
     assert_equal 10 * 59 - 75, monthly_client_datum.ending_balance
+
+    next_month = monthly_client_datum.month_dt + 1.month
+    next_monthly_client_datum = @client.monthly_client_data.first(:conditions => { :month => next_month.month, :year => next_month.year })
+    assert_equal monthly_client_datum.ending_balance, next_monthly_client_datum.beginning_balance
   end
 
   def teardown
