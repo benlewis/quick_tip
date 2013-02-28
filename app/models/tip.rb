@@ -14,7 +14,7 @@ class Tip < ActiveRecord::Base
   validate :cents_add_up
 
   before_create :set_defaults
-  before_create :calculate_profits
+  after_initialize :calculate_profits
 
   def set_defaults
     self.status ||= 'valid'
@@ -30,6 +30,11 @@ class Tip < ActiveRecord::Base
     if total_cents != processing_fees_cents + client_cents + qt_cents
       errors.add(:total_cents, 'Is not the sum of processing fees, qt cents, and client cents')
     end
+  end
+
+  def invalidate!
+    self.status = 'invalid'
+    save!
   end
 
 end

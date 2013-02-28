@@ -4,8 +4,7 @@ class FakePayoutVehicle < ActiveRecord::Base
   attr_accessible :code
   validates_presence_of :code
 
-  def self.create_with_payout!(options = {})
-    client = options.delete(:client) { raise ':client necessary in create_with_payout!' }
+  def self.create_with_payout!(client, options = {})
     cents = options.delete(:cents) { raise ':cents necessary in create_with_payout!' }
     code = options.delete(:code) { SecureRandom.hex(16) }
 
@@ -13,8 +12,7 @@ class FakePayoutVehicle < ActiveRecord::Base
 
     fake_payout_vehicle = create!(:code => code)
 
-    Payout.create!(
-      :client => client,
+    client.payouts.create!(
       :cents => cents,
       :vehicle => fake_payout_vehicle
     )

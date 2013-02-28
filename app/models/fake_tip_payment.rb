@@ -4,8 +4,7 @@ class FakeTipPayment < ActiveRecord::Base
   attr_accessible :code
   validates_presence_of :code
 
-  def self.create_with_tip!(options = {})
-    client = options.delete(:client) { raise ':client necessary in create_with_tip!' }
+  def self.create_with_tip!(client, options = {})
     total_cents = options.delete(:total_cents) { 100 }
     processing_fees_cents = options.delete(:processing_fees_cents) { 35 }
     code = options.delete(:code) { SecureRandom.hex(16) }
@@ -14,7 +13,7 @@ class FakeTipPayment < ActiveRecord::Base
 
     fake_tip_payment = create!(:code => code)
 
-    Tip.create!(
+    client.tips.create!(
       :total_cents => total_cents,
       :processing_fees_cents => processing_fees_cents,
       :payment => fake_tip_payment
