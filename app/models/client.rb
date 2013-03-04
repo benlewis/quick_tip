@@ -13,6 +13,8 @@ class Client < ActiveRecord::Base
 
   after_create :create_first_monthly_client_data
 
+  scope :trial, where(:qt_pct => 0.05)
+
   def create_first_monthly_client_data
     now = DateTime.now
     monthly_client_data.create!(:month => now.month, :year => now.year, :beginning_balance => 0)

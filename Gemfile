@@ -10,6 +10,8 @@ gem 'pg'
 gem 'simple_form'
 gem 'bootstrap-sass'
 gem 'devise'
+gem 'activeadmin'
+gem 'meta_search'
 
 # Gems used only for assets and not required
 # in production environments by default.
