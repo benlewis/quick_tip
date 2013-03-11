@@ -5,3 +5,6 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
+
+Client.create :name => 'Golden Gate Disc Golf', :short_name => 'ggds'
+Client.create :name => 'de Young', :short_name => 'dy'

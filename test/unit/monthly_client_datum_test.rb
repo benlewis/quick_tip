@@ -3,7 +3,7 @@ require 'test_helper'
 class MonthlyClientDataTest < ActiveSupport::TestCase
 
   def setup
-    @client = Client.create(:name => 'test', :short_name => 'tt', :qt_pct => 0.10)
+    @client = Client.create(:name => 'test', :short_name => 'tt', :service_pct => 10.0)
   end
 
   def create_fake_tip
@@ -27,7 +27,7 @@ class MonthlyClientDataTest < ActiveSupport::TestCase
     tip = @client.tips.first
     assert_equal 100, tip.total_cents
     assert_equal 35, tip.processing_fees_cents
-    assert_equal 6, tip.qt_cents
+    assert_equal 6, tip.service_cents
     assert_equal 59, tip.client_cents
 
     monthly_client_datum = @client.current_monthly_datum
@@ -36,7 +36,7 @@ class MonthlyClientDataTest < ActiveSupport::TestCase
     assert_equal 10, monthly_client_datum.total_tips_count
     assert_equal 10 * 100, monthly_client_datum.total_tips_cents
     assert_equal 10 * 35, monthly_client_datum.total_tips_processing_fees_cents
-    assert_equal 10 * 6, monthly_client_datum.total_tips_qt_cents
+    assert_equal 10 * 6, monthly_client_datum.total_tips_service_cents
     assert_equal 10 * 59, monthly_client_datum.total_tips_client_cents
     assert_equal 10 * 59, monthly_client_datum.ending_balance
 

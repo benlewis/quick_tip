@@ -3,7 +3,7 @@ class CreateClients < ActiveRecord::Migration
     create_table :clients do |t|
       t.string :name, :null => false, :limit => 35
       t.string :short_name, :null => false, :limit => 10
-      t.float :qt_pct, :null => false, :default => 0.05
+      t.float :service_pct, :null => false, :default => 5.0
 
       t.timestamps
     end

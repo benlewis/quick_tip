@@ -1,14 +1,11 @@
-class AdminUser < ActiveRecord::Base
+class Tipper < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :token_authenticatable, :confirmable,
   # :lockable, :timeoutable and :omniauthable
-  devise :database_authenticatable,
+  devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
 
-  belongs_to :client
-
   # Setup accessible (or protected) attributes for your model
-  attr_accessible :email, :password, :password_confirmation, :remember_me, :client_id, :super_admin
+  attr_accessible :email, :password, :password_confirmation, :remember_me
   # attr_accessible :title, :body
-
 end

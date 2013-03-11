@@ -150,3 +150,11 @@ ActiveAdmin.setup do |config|
   # Set the CSV builder options (default is {})
   # config.csv_options = {}
 end
+
+ActiveAdmin::ResourceController.class_eval do
+  def check_super_admin
+    return if current_admin_user && current_admin_user.super_admin?
+    flash[:notice] = "You need to be an admin to access this part of the application"
+    redirect_to root_path
+  end
+end

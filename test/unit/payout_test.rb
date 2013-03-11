@@ -3,7 +3,7 @@ require 'test_helper'
 class PayoutTest < ActiveSupport::TestCase
 
   def setup
-    @client = Client.create(:name => 'test', :short_name => 'tt', :qt_pct => 0.10)
+    @client = Client.create(:name => 'test', :short_name => 'tt', :service_pct => 10.0)
   end
 
   def create_fake_payout

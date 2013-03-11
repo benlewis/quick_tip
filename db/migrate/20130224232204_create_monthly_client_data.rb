@@ -6,14 +6,14 @@ class CreateMonthlyClientData < ActiveRecord::Migration
       t.integer :year, :null => false
       t.datetime :last_calculated_at
       t.integer :beginning_balance, :null => false
-      t.integer :ending_balance
-      t.integer :total_tips_count
-      t.integer :total_tips_cents
-      t.integer :total_tips_processing_fees_cents
-      t.integer :total_tips_qt_cents
-      t.integer :total_tips_client_cents
-      t.integer :total_payouts_count
-      t.integer :total_payouts_cents
+      t.integer :ending_balance, :null => false, :default => 0
+      t.integer :total_tips_count, :null => false, :default => 0
+      t.integer :total_tips_cents, :null => false, :default => 0
+      t.integer :total_tips_processing_fees_cents, :null => false, :default => 0
+      t.integer :total_tips_service_cents, :null => false, :default => 0
+      t.integer :total_tips_client_cents, :null => false, :default => 0
+      t.integer :total_payouts_count, :null => false, :default => 0
+      t.integer :total_payouts_cents, :null => false, :default => 0
 
       t.timestamps
     end

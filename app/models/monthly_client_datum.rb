@@ -2,7 +2,7 @@ class MonthlyClientDatum < ActiveRecord::Base
   belongs_to :client
 
   attr_accessible :beginning_balance, :ending_balance, :month, :year, :client
-  attr_protected :total_tips_count, :total_tips_cents, :total_tips_processing_fees, :total_tips_qt_cents
+  attr_protected :total_tips_count, :total_tips_cents, :total_tips_processing_fees, :total_tips_service_cents
 
   # t.datetime :last_calculated_at
   # t.integer :beginning_balance
@@ -10,8 +10,8 @@ class MonthlyClientDatum < ActiveRecord::Base
   # t.integer :total_tips_count
   # t.integer :total_tips_cents
   # t.integer :total_tips_processing_fees_cents
-  # t.integer :total_tips_qt_cents
-  # t.integer :total_tips_qt_cents_client_cents
+  # t.integer :total_tips_service_cents
+  # t.integer :total_tips_client_cents
   # t.integer :total_payouts_count
   # t.integer :total_payouts_cents
 
@@ -36,7 +36,7 @@ class MonthlyClientDatum < ActiveRecord::Base
     self.total_tips_count = tips.count
     self.total_tips_cents = tips.sum(&:total_cents)
     self.total_tips_processing_fees_cents = tips.sum(&:processing_fees_cents)
-    self.total_tips_qt_cents = tips.sum(&:qt_cents)
+    self.total_tips_service_cents = tips.sum(&:service_cents)
     self.total_tips_client_cents = tips.sum(&:client_cents)
 
     payouts = client.payouts.where(:created_at => month_range, :status => 'valid')

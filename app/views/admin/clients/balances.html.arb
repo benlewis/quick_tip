@@ -1,0 +1,4 @@
+table_for assigns[:clients] do |t|
+  t.column(:name)
+  t.column(:balance)
+end

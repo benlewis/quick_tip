@@ -5,13 +5,17 @@ gem 'rails', '3.2.12'
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
-gem 'sqlite3'
+gem 'mysql2'
 gem 'pg'
 gem 'simple_form'
 gem 'bootstrap-sass'
 gem 'devise'
 gem 'activeadmin'
 gem 'meta_search'
+
+# payments
+gem 'stripe'
+
 
 # Gems used only for assets and not required
 # in production environments by default.
@@ -34,6 +38,9 @@ group :development do
   gem 'foreman'
 end
 
+group :test do
+  gem "factory_girl_rails"
+end
 
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'

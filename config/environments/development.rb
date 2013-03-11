@@ -38,4 +38,6 @@ QuickTip::Application.configure do
   #Mailer for devise
   config.action_mailer.default_url_options = { :host => 'localhost:3000' }
 
+  Stripe.api_key = "sk_test_GafHaiIb4ySidtoYKXcxdAWq"
+
 end

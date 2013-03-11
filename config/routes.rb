@@ -1,4 +1,6 @@
 QuickTip::Application.routes.draw do
+  devise_for :tippers
+
   ActiveAdmin.routes(self)
 
   devise_for :admin_users, ActiveAdmin::Devise.config
