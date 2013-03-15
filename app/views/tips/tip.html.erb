@@ -1,0 +1,11 @@
+<h1>Tip <%= @client.name %></h1>
+
+<%= simple_form_for @stripe_card_tip, :url => tips_path do |f| %>
+  <%= f.input :amount %>
+  <%= f.input :name %>
+  <%= f.input :number %>
+  <%= f.input :exp_month %>
+  <%= f.input :exp_year %>
+
+  <%= f.submit :class => 'btn' %>
+<% end %>

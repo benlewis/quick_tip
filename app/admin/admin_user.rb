@@ -1,6 +1,6 @@
 ActiveAdmin.register AdminUser do
-  menu :if => proc { current_admin_user.super_admin? }
   before_filter :check_super_admin
+  menu :if => proc { current_admin_user.super_admin? }
 
   index do
     column :email

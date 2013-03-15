@@ -10,7 +10,10 @@ class StripeCard < ActiveRecord::Base
     'Credit Card'
   end
 
-  def self.create_with_charge!(card_details, charge_details)
+  def self.create_with_charge!(stripe_card_tip)
+    charge_details = stripe_card_tip.charge_details
+    card_details = stripe_card_tip.card_details
+
     amount = charge_details.delete(:amount) { raise "charge_details[:amount] required" }
     client = charge_details.delete(:client) { raise "charge_details[:client] required " }
     description = charge_details.delete(:description) { "Tip for #{client.name}" }
@@ -152,4 +155,34 @@ class StripeCard < ActiveRecord::Base
     tip_params
   end
 
+  class Tip < Struct.new(:amount, :client, :name, :number, :exp_month, :exp_year)
+    extend ActiveModel::Naming
+    include ActiveModel::Conversion
+
+    def initialize(client)
+      self.client = client
+    end
+
+    def charge_details
+      to_h.slice(
+        :amount,
+        :client
+      )
+    end
+
+    def card_details
+      to_h.slice(
+        :name,
+        :number,
+        :exp_month,
+        :exp_year
+      )
+    end
+
+    def persisted?
+      false
+    end
+  end
+
 end
+

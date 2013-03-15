@@ -1,8 +1,9 @@
-ActiveAdmin.register Tip, :namespace => "account" do
+ActiveAdmin.register Tip do
   scope_to do
-    unless current_admin_user.super_admin?
-      current_admin_user.client
-    end
+    # unless current_admin_user.super_admin?
+    #   current_admin_user.client
+    # end
+    @logged_in_client
   end
 
   config.clear_action_items!
