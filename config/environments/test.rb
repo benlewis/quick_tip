@@ -34,4 +34,12 @@ QuickTip::Application.configure do
 
   # Print deprecation notices to the stderr
   config.active_support.deprecation = :stderr
+
+  Stripe.api_key = "sk_test_GafHaiIb4ySidtoYKXcxdAWq"
+
+  VCR.configure do |c|
+    c.cassette_library_dir = 'fixtures/vcr_cassettes'
+    c.hook_into :webmock # or :fakeweb
+  end
+
 end

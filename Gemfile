@@ -40,6 +40,8 @@ end
 
 group :test do
   gem "factory_girl_rails"
+  gem 'webmock', '1.8.0'
+  gem 'vcr'
 end
 
 # To use ActiveModel has_secure_password

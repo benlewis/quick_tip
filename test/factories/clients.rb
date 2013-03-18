@@ -4,4 +4,5 @@ FactoryGirl.define do
     short_name 'ggds'
     service_pct 5.0
   end
+
 end

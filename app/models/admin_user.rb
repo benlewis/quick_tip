@@ -8,7 +8,7 @@ class AdminUser < ActiveRecord::Base
   belongs_to :client
 
   # Setup accessible (or protected) attributes for your model
-  attr_accessible :email, :password, :password_confirmation, :remember_me, :client_id, :super_admin
+  attr_accessible :email, :password, :password_confirmation, :remember_me, :client, :super_admin, :client_id
   # attr_accessible :title, :body
 
 end

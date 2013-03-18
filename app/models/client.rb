@@ -1,6 +1,6 @@
 class Client < ActiveRecord::Base
   has_many :monthly_client_data
-  has_many :users
+  has_many :admin_users
   has_many :tips, :conditions => { :status => 'valid' }
   has_many :payouts, :conditions => { :status => 'valid' }
 
@@ -15,7 +15,6 @@ class Client < ActiveRecord::Base
 
   scope :with_balance #, where("balance > 0")
   scope :trial, where(:service_pct => 0.05)
-  scope :all
 
   def create_first_monthly_client_data
     now = DateTime.now

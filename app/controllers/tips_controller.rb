@@ -1,15 +1,25 @@
 class TipsController < ApplicationController
   layout 'marketing'
+  before_filter :load_client
 
   def tip
-    @client = Client.find_by_short_name(params[:short_name])
-    @stripe_card_tip = StripeCard::Tip.new(@client)
+    @stripe_card = StripeCard.new(:charge_client => @client)
   end
 
   def create
-    @stripe_card_tip = StripeCard::Tip.new params[:stripe_card_tip]
+    @stripe_card = StripeCard.create params[:stripe_card].merge(:charge_client => @client)
 
-    render :text => @stripe_card_tip.to_json
+    if @stripe_card.errors.any?
+      render :action => :tip
+    else
+      render :text => @stripe_card.to_json
+    end
+  end
+
+  protected
+
+  def load_client
+    @client = Client.find_by_short_name(params[:short_name])
   end
 
 end

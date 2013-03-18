@@ -1,65 +1,85 @@
 class StripeCard < ActiveRecord::Base
   belongs_to :tipper
 
+  attr_accessor :charge_amount, :charge_description, :charge_client
+  attr_accessor :credit_card_number
+
+  # attr_accessible :last4, :cc_type, :exp_month, :exp_year, :fingerprint, :country,
+  #     :name, :address_line1, :address_line2, :address_city, :address_state, :address_zip, :address_country,
+  #     :cvc_check, :address_line1_check, :address_zip_check, :fake, :tipper
+
+  attr_accessible :charge_amount, :charge_description, :charge_client, :credit_card_number,
+    :exp_month, :exp_year, :name
+
+  validates_presence_of :charge_amount, :charge_client, :credit_card_number,
+    :exp_month, :exp_year, :name
+
+  validate :attempt_charge
   validates_presence_of :last4, :cc_type, :exp_month, :exp_year, :country, :fingerprint
-  attr_accessible :last4, :cc_type, :exp_month, :exp_year, :fingerprint, :country,
-    :name, :address_line1, :address_line2, :address_city, :address_state, :address_zip, :address_country,
-    :cvc_check, :address_line1_check, :address_zip_check, :fake, :tipper
+  after_create :create_tip
 
   def display
     'Credit Card'
   end
 
-  def self.create_with_charge!(stripe_card_tip)
-    charge_details = stripe_card_tip.charge_details
-    card_details = stripe_card_tip.card_details
+  def create_tip
+    return unless @stripe_response
+    tip_params = filter_tip_params_from_response
+    Tip.create! tip_params.merge(:client => @charge_client, :payment_method => self)
+  end
 
-    amount = charge_details.delete(:amount) { raise "charge_details[:amount] required" }
-    client = charge_details.delete(:client) { raise "charge_details[:client] required " }
-    description = charge_details.delete(:description) { "Tip for #{client.name}" }
-    card = card_details # TODO: Add support for Tippers to save credit cards
+  def attempt_charge
+    return unless @charge_amount
+    @charge_amount = @charge_amount.to_i
 
-    raise "Minimum payment amount is 50 cents" if amount < 50
+    errors.add(:charge_amount, "Minimum payment amount is 50 cents") if @charge_amount < 50
+    errors.add(:charge_client, "Missing client") unless @charge_client && @charge_client.is_a?(Client)
+    return if errors.any?
+
+    @charge_description ||= "Tip for #{@charge_client.name}"
 
     begin
       response = Stripe::Charge.create(
-        :amount => amount,
+        :amount => @charge_amount,
         :currency => 'usd',
-        :description => description,
-        :card => card
+        :description => @charge_description,
+        :card => attributes.slice('exp_month', 'exp_year', 'name').merge({
+          :number => @credit_card_number
+        })
       )
 
-      card_params = filter_card_params_from_response(response)
-      stripe_card = StripeCard.create! card_params
-
-      tip_params = filter_tip_params_from_response(response)
-      tip = Tip.create! tip_params.merge(:client => client, :payment_method => stripe_card)
+      @stripe_response = response
+      set_card_params_from_response
     rescue Stripe::CardError => e
       # Since it's a decline, Stripe::CardError will be caught
       body = e.json_body
       err  = body[:error]
 
-      puts "Status is: #{e.http_status}"
-      puts "Type is: #{err[:type]}"
-      puts "Code is: #{err[:code]}"
-      # param is '' in this case
-      puts "Param is: #{err[:param]}"
-      puts "Message is: #{err[:message]}"
+      #e.http_status
+      # err[:type]
+      # err[:code]
+      # err[:param]
+      # err[:message]
+      errors.add(:base, "#{err[:message]}")
     rescue Stripe::InvalidRequestError => e
       # Invalid parameters were supplied to Stripe's API
+      errors.add(:base, "Parameter error contacting payment service")
     rescue Stripe::AuthenticationError => e
       # Authentication with Stripe's API failed
       # (maybe you changed API keys recently)
+      errors.add(:base, "Authentication error contacting payment service")
     rescue Stripe::APIConnectionError => e
       # Network communication with Stripe failed
+      errors.add(:base, "Error contacting payment service")
     rescue Stripe::StripeError => e
       # Display a very generic error to the user, and maybe send
       # yourself an email
+      errors.add(:base, "Generic error charging card")
     end
 
   end
 
-  def self.filter_card_params_from_response(response)
+  def set_card_params_from_response
     # "card": {
     #     "object": "card",
     #     "last4": "4242",
@@ -80,31 +100,27 @@ class StripeCard < ActiveRecord::Base
     #     "address_zip_check": null
     #   },
 
-    fake = !response.livemode
-    card = response.card
-    card_params = {
-      :last4 => card.last4,
-      :cc_type => card.type,
-      :exp_month => card.exp_month,
-      :exp_year => card.exp_year,
-      :fingerprint => card.fingerprint,
-      :country => card.country,
-      :name => card.name,
-      :address_line1 => card.address_line1,
-      :address_line2 => card.address_line2,
-      :address_city => card.address_city,
-      :address_zip => card.address_zip,
-      :address_country => card.address_country,
-      :cvc_check => card.cvc_check || 'unchecked',
-      :address_line1_check => card.address_line1_check || 'unchecked',
-      :address_zip_check => card.address_zip_check || 'unchecked',
-      :fake => fake
-    }
-
-    card_params
+    fake = !@stripe_response.livemode
+    card = @stripe_response.card
+    self.last4 = card.last4
+    self.cc_type = card.type
+    self.exp_month = card.exp_month
+    self.exp_year = card.exp_year
+    self.fingerprint = card.fingerprint
+    self.country = card.country
+    self.name = card.name
+    self.address_line1 = card.address_line1
+    self.address_line2 = card.address_line2
+    self.address_city = card.address_city
+    self.address_zip = card.address_zip
+    self.address_country = card.address_country
+    self.cvc_check = card.cvc_check || 'unchecked'
+    self.address_line1_check = card.address_line1_check || 'unchecked'
+    self.address_zip_check = card.address_zip_check || 'unchecked'
+    self.fake = fake
   end
 
-  def self.filter_tip_params_from_response(response)
+  def filter_tip_params_from_response
     # #<Stripe::Charge id=ch_1QqqrCIMbOlvpZ 0x00000a> JSON: {
     #   "id": "ch_1QqqrCIMbOlvpZ",
     #   "object": "charge",
@@ -146,42 +162,13 @@ class StripeCard < ActiveRecord::Base
     # }
 
     tip_params = {
-      :third_party_id => response.id,
-      :fake => !response.livemode,
-      :total_cents => response.amount,
-      :processing_fees_cents => response.fee
+      :third_party_id => @stripe_response.id,
+      :fake => !@stripe_response.livemode,
+      :total_cents => @stripe_response.amount,
+      :processing_fees_cents => @stripe_response.fee
     }
 
     tip_params
-  end
-
-  class Tip < Struct.new(:amount, :client, :name, :number, :exp_month, :exp_year)
-    extend ActiveModel::Naming
-    include ActiveModel::Conversion
-
-    def initialize(client)
-      self.client = client
-    end
-
-    def charge_details
-      to_h.slice(
-        :amount,
-        :client
-      )
-    end
-
-    def card_details
-      to_h.slice(
-        :name,
-        :number,
-        :exp_month,
-        :exp_year
-      )
-    end
-
-    def persisted?
-      false
-    end
   end
 
 end

@@ -14,8 +14,6 @@ QuickTip::Application.routes.draw do
     post '/:short_name/', :to => :create, :as => 'tips'
   end
 
-  devise_for :users
-
   root :to => 'static_pages#home'
 
 end
