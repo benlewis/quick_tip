@@ -6,9 +6,13 @@ class AdminUser < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
 
   belongs_to :client
-
-  # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :password, :password_confirmation, :remember_me, :client, :super_admin, :client_id
-  # attr_accessible :title, :body
+
+  validate :super_admin_client
+
+  def super_admin_client
+    errors.add(:super_admin, "Super Admins can't have clients") if super_admin? && client
+    errors.add(:client, "Non super-admins must have a client") if !super_admin? && client.nil?
+  end
 
 end

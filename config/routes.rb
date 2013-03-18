@@ -9,10 +9,11 @@ QuickTip::Application.routes.draw do
   match '/' => 'static_pages#home'
 
   # Tips
-  controller :tips do
-    get '/:short_name/', :to => :tip
-    post '/:short_name/', :to => :create, :as => 'tips'
-  end
+  # controller :tips do
+  #     get '/:short_name/', :to => :tip
+  #     post '/:short_name/', :to => :create, :as => 'tips'
+  #   end
+  resources :tips, :path => '/:short_name'
 
   root :to => 'static_pages#home'
 

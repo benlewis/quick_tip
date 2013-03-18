@@ -2,7 +2,7 @@ class TipsController < ApplicationController
   layout 'marketing'
   before_filter :load_client
 
-  def tip
+  def index
     @stripe_card = StripeCard.new(:charge_client => @client)
   end
 
@@ -10,7 +10,7 @@ class TipsController < ApplicationController
     @stripe_card = StripeCard.create params[:stripe_card].merge(:charge_client => @client)
 
     if @stripe_card.errors.any?
-      render :action => :tip
+      render :action => :index
     else
       render :text => @stripe_card.to_json
     end

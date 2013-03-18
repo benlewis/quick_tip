@@ -40,7 +40,7 @@ ActiveAdmin.register Client do
       number_to_percentage client.service_pct, :precision => 1
     end
     column :total_earnings do |client|
-      number_to_currency client.total_earnings
+      number_to_currency client.total_earnings / 100.0
     end
     default_actions
     column :login_as do |client|

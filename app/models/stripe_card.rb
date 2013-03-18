@@ -1,5 +1,6 @@
 class StripeCard < ActiveRecord::Base
   belongs_to :tipper
+  has_many :tips
 
   attr_accessor :charge_amount, :charge_description, :charge_client
   attr_accessor :credit_card_number

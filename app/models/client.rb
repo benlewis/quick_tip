@@ -21,8 +21,7 @@ class Client < ActiveRecord::Base
     monthly_client_data.create!(:month => now.month, :year => now.year, :beginning_balance => 0)
   end
 
-  def current_monthly_datum
-    now = DateTime.now
+  def current_monthly_datum(now = DateTime.now)
     monthly_client_data.first(:conditions => { :month => now.month, :year => now.year })
   end
 

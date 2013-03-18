@@ -7,6 +7,7 @@ ActiveAdmin.register Tip do
   end
 
   config.clear_action_items!
+  actions :index
 
   index do
     column :id

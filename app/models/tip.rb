@@ -16,6 +16,8 @@ class Tip < ActiveRecord::Base
   before_validation :set_defaults
   before_validation :calculate_profits
 
+  after_commit :update_monthly_data
+
   def set_defaults
     self.status ||= 'valid'
   end
@@ -35,6 +37,11 @@ class Tip < ActiveRecord::Base
   def invalidate!
     self.status = 'invalid'
     save!
+  end
+
+  def update_monthly_data
+    # TODO: Put this in a queue
+    client.current_monthly_datum(created_at).calculate!
   end
 
 end

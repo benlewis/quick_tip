@@ -8,3 +8,7 @@
 
 Client.create :name => 'Golden Gate Disc Golf', :short_name => 'ggds'
 Client.create :name => 'de Young', :short_name => 'dy'
+
+admin_user = AdminUser.find_by_email 'admin@example.com'
+admin_user.super_admin = true
+admin_user.save

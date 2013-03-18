@@ -1,0 +1,19 @@
+<h1>Tip <%= @client.name %></h1>
+
+<% if @stripe_card.errors.any? %>
+  <ul>
+    <% @stripe_card.errors.each do |m, v| %>
+    <li><%= m %>: <%= v %></li>
+    <% end %>
+  </ul>
+<% end %>
+
+<%= simple_form_for @stripe_card, :url => tips_path do |f| %>
+  <%= f.input :charge_amount, :as => :integer %>
+  <%= f.input :name %>
+  <%= f.input :credit_card_number %>
+  <%= f.input :exp_month %>
+  <%= f.input :exp_year %>
+
+  <%= f.submit :class => 'btn' %>
+<% end %>
