@@ -2,10 +2,10 @@
 http_interactions:
 - request:
     method: post
-    uri: https://api.stripe.com/v1/charges
+    uri: https://api.stripe.com/v1/customers
     body:
       encoding: US-ASCII
-      string: amount=100&currency=usd&description=Tip%20for%20Golden%20Gate%20Disc%20Golf&card[exp_month]=5&card[exp_year]=2015&card[name]=Ben%20Lewis&card[number]=4242424242424242
+      string: description=Placeholder%20Customer&card[number]=4242424242424242&card[exp_month]=5&card[exp_year]=2015&card[name]=Ben%20Lewis
     headers:
       Accept:
       - '*/*; q=0.5, application/xml'
@@ -22,7 +22,7 @@ http_interactions:
         Benjamins-MacBook-Pro.local 11.4.2 Darwin Kernel Version 11.4.2: Thu Aug 23
         16:25:48 PDT 2012; root:xnu-1699.32.7~1/RELEASE_X86_64 x86_64"}'
       Content-Length:
-      - '166'
+      - '125'
   response:
     status:
       code: 200
@@ -31,11 +31,11 @@ http_interactions:
       Server:
       - nginx
       Date:
-      - Mon, 18 Mar 2013 04:17:00 GMT
+      - Fri, 22 Mar 2013 06:28:03 GMT
       Content-Type:
       - application/json;charset=utf-8
       Content-Length:
-      - '1031'
+      - '713'
       Connection:
       - keep-alive
       Access-Control-Max-Age:
@@ -48,9 +48,89 @@ http_interactions:
       encoding: UTF-8
       string: |
         {
-          "id": "ch_1TsSVq10sXkwKj",
+          "object": "customer",
+          "created": 1363933682,
+          "id": "cus_1VPTGZFvhVXdTS",
+          "livemode": false,
+          "description": "Placeholder Customer",
+          "active_card": {
+            "object": "card",
+            "last4": "4242",
+            "type": "Visa",
+            "exp_month": 5,
+            "exp_year": 2015,
+            "fingerprint": "Wky4gIcxka7OZjnQ",
+            "country": "US",
+            "name": "Ben Lewis",
+            "address_line1": null,
+            "address_line2": null,
+            "address_city": null,
+            "address_state": null,
+            "address_zip": null,
+            "address_country": null,
+            "cvc_check": null,
+            "address_line1_check": null,
+            "address_zip_check": null
+          },
+          "email": null,
+          "delinquent": false,
+          "subscription": null,
+          "discount": null,
+          "account_balance": 0
+        }
+    http_version: 
+  recorded_at: Fri, 22 Mar 2013 06:28:03 GMT
+- request:
+    method: post
+    uri: https://api.stripe.com/v1/charges
+    body:
+      encoding: US-ASCII
+      string: amount=100&currency=usd&customer=cus_1VPTGZFvhVXdTS
+    headers:
+      Accept:
+      - '*/*; q=0.5, application/xml'
+      Accept-Encoding:
+      - gzip, deflate
+      User-Agent:
+      - Stripe/v1 RubyBindings/1.7.11
+      Authorization:
+      - Bearer sk_test_GafHaiIb4ySidtoYKXcxdAWq
+      Content-Type:
+      - application/x-www-form-urlencoded
+      X-Stripe-Client-User-Agent:
+      - '{"bindings_version":"1.7.11","lang":"ruby","lang_version":"2.0.0 p0 (2013-02-24)","platform":"x86_64-darwin11.4.2","publisher":"stripe","uname":"Darwin
+        Benjamins-MacBook-Pro.local 11.4.2 Darwin Kernel Version 11.4.2: Thu Aug 23
+        16:25:48 PDT 2012; root:xnu-1699.32.7~1/RELEASE_X86_64 x86_64"}'
+      Content-Length:
+      - '51'
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Fri, 22 Mar 2013 06:28:03 GMT
+      Content-Type:
+      - application/json;charset=utf-8
+      Content-Length:
+      - '1020'
+      Connection:
+      - keep-alive
+      Access-Control-Max-Age:
+      - '300'
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Cache-Control:
+      - no-cache, no-store
+    body:
+      encoding: UTF-8
+      string: |
+        {
+          "id": "ch_1VPTKltKmhR473",
           "object": "charge",
-          "created": 1363580220,
+          "created": 1363933683,
           "livemode": false,
           "paid": true,
           "amount": 100,
@@ -89,11 +169,11 @@ http_interactions:
           "captured": true,
           "failure_message": null,
           "amount_refunded": 0,
-          "customer": null,
+          "customer": "cus_1VPTGZFvhVXdTS",
           "invoice": null,
-          "description": "Tip for Golden Gate Disc Golf",
+          "description": null,
           "dispute": null
         }
     http_version: 
-  recorded_at: Mon, 18 Mar 2013 04:17:00 GMT
+  recorded_at: Fri, 22 Mar 2013 06:28:03 GMT
 recorded_with: VCR 2.4.0
