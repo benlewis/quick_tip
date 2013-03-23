@@ -38,6 +38,7 @@ class StripeCard < ActiveRecord::Base
     return if errors.any?
 
     begin
+      # Store the customer id as the stripe_id for this card, since that's what we'll charge
       response = Stripe::Customer.create(
         :description => 'Placeholder Customer',
         :card => {
