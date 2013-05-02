@@ -13,12 +13,13 @@
 //= require jquery
 //= require jquery_ujs
 //= require twitter/bootstrap
+//= require jquery.payment
 //= require_tree .
 
 $(function(){
 
-
-
+  $('.cc-num').payment('formatCardNumber');
+  $('.cc-exp').payment('formatCardExpiry');
 
 
 });

@@ -1,19 +1,35 @@
-<h1>Tip <%= @client.name %></h1>
+<div class="page-header">
+  <h1>
+    Tip <%= @client.name %>
+  </h1>
+</div>
 
 <% if @stripe_card.errors.any? %>
-  <ul>
-    <% @stripe_card.errors.each do |m, v| %>
-    <li><%= m %>: <%= v %></li>
-    <% end %>
+  <div class="alert alert-error">
+     <button type="button" class="close">×</button>
+    <ul>
+      <% @stripe_card.errors.each do |m, v| %>
+      <li><%= m %>: <%= v %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<div class="tabbable">
+  <ul class="nav nav-tabs nav-pills">
+    <li class="active"><a href="#stripe" data-toggle="tab">Credit Card</a></li>
+    <li><a href="#bitcoins" data-toggle="tab">Bitcoins</a> </li>
+    <li><a href="#paypal" data-toggle="tab">Paypal</a> </li>
   </ul>
-<% end %>
-
-<%= simple_form_for @stripe_card, :url => tips_path do |f| %>
-  <%= f.input :charge_amount, :as => :integer %>
-  <%= f.input :name %>
-  <%= f.input :credit_card_number %>
-  <%= f.input :exp_month %>
-  <%= f.input :exp_year %>
-
-  <%= f.submit :class => 'btn' %>
-<% end %>
+  <div class="tab-content">
+    <div class="tab-pane active" id="stripe">
+      <%= render :partial => 'stripe_card', :locals => { :stripe_card => @stripe_card } %>
+    </div>
+    <div class="tab-pane" id="bitcoins">
+      <p>I'm Bitcoins</p>
+    </div>
+    <div class="tab-pane" id="paypal">
+      <p>I'm Paypal</p>
+    </div>
+  </div>
+</div>

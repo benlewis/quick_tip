@@ -2,7 +2,7 @@ class StripeCard < ActiveRecord::Base
   belongs_to :tipper
   has_many :tips
 
-  attr_accessor :charge_amount, :charge_description, :charge_client
+  attr_accessor :charge_amount, :charge_description, :charge_client, :expiration
   attr_accessor :credit_card_number
 
   # attr_accessible :last4, :cc_type, :exp_month, :exp_year, :fingerprint, :country,
@@ -12,10 +12,10 @@ class StripeCard < ActiveRecord::Base
   attr_accessible :charge_amount, :charge_description, :charge_client, :credit_card_number,
     :exp_month, :exp_year, :name
 
-  validates_presence_of :charge_amount, :charge_client, :credit_card_number,
-    :exp_month, :exp_year, :name
+  validates_presence_of :charge_amount, :charge_client, :credit_card_number, :on => :create
+  validates_presence_of  :exp_month, :exp_year, :name
+  validate :create_token_and_charge, :on => :create
 
-  validate :create_token_and_charge
   validates_presence_of :last4, :cc_type, :exp_month, :exp_year, :country, :fingerprint
   after_create :create_tip
 
@@ -35,7 +35,7 @@ class StripeCard < ActiveRecord::Base
 
     errors.add(:charge_amount, "Minimum payment amount is 50 cents") if @charge_amount < 50
     errors.add(:charge_client, "Missing client") unless @charge_client && @charge_client.is_a?(Client)
-    return if errors.any?
+    return false if errors.any?
 
     begin
       # Store the customer id as the stripe_id for this card, since that's what we'll charge

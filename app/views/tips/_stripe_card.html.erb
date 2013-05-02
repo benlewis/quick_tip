@@ -1,0 +1,10 @@
+
+<%= form_for stripe_card do |f| %>
+  <%= hidden_field_tag :short_name, @client.short_name %>
+  <p>Amount: <%= f.text_field :charge_amount, :as => :radio, :collection => [1, 5, 10] %></p>
+  <p>Name: <%= f.text_field :name %></p>
+  <p>Credit Card #: <%= f.text_field :credit_card_number, :class => 'cc-num', :pattern => '[\d|\s]*', 'x-autocompletetype' => "cc-number", :placeholder => "Card number", :required => true %></p>
+  <p>Expiration: <%= f.text_field :expiration, :class => 'cc-exp' %></p>
+
+  <%= f.submit 'Tip!', :class => 'btn btn-primary' %>
+<% end %>

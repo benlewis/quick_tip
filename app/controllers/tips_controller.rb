@@ -1,6 +1,6 @@
 class TipsController < ApplicationController
-  layout 'marketing'
-  before_filter :load_client
+  layout 'tip'
+  before_filter :load_client_from_short_name
 
   def index
     @stripe_card = StripeCard.new(:charge_client => @client)
@@ -14,12 +14,6 @@ class TipsController < ApplicationController
     else
       render :text => @stripe_card.to_json
     end
-  end
-
-  protected
-
-  def load_client
-    @client = Client.find_by_short_name(params[:short_name])
   end
 
 end
