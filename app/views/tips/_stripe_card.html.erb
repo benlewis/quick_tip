@@ -1,14 +1,19 @@
 
 <div class="payment-details">
   Payment details
-  <%= img_tag 'credit_cards/blank' %>
+  <span id="cc-images">
+    <%= image_tag 'credit_cards/visa.png', :id => 'visa', :class => 'cc_img' %>
+    <%= image_tag 'credit_cards/mastercard.png', :id => 'mastercard', :class => 'cc_img' %>
+    <%= image_tag 'credit_cards/amex.png', :id => 'amex', :class => 'cc_img' %>
+    <%= image_tag 'credit_cards/discover.png', :id => 'discover', :class => 'cc_img' %>
+  </span>
 
-  <%= form_for stripe_card do |f| %>
+  <%= form_for stripe_card, :autocomplete => 'on', :id => 'stripe_payment' do |f| %>
     <%= hidden_field_tag :short_name, @client.short_name %>
-    <p>Amount: <%= f.text_field :charge_amount, :as => :radio, :collection => [1, 5, 10] %></p>
-    <p>Name: <%= f.text_field :name %></p>
-    <p>Credit Card #: <%= f.text_field :credit_card_number, :class => 'cc-num', :pattern => '[\d|\s]*', 'x-autocompletetype' => "cc-number", :placeholder => "Card number", :required => true %></p>
-    <p>Expiration: <%= f.text_field :expiration, :class => 'cc-exp' %></p>
+    <p class="form-field">Amount: <%= f.text_field :charge_amount, :as => :radio, :collection => [1, 5, 10] %></p>
+    <p class="form-field">Name: <%= f.text_field :name %></p>
+    <p class="form-field">Credit Card #: <%= f.text_field :credit_card_number, :class => 'cc-number', :pattern => '[\d|\s]*', 'autocompletetype' => "cc-number", :placeholder => "Card number", :required => true %></p>
+    <p class="form-field">Expiration: <%= f.text_field :expiration, :class => 'cc-exp' %></p>
 
     <%= f.submit 'Tip!', :class => 'btn btn-primary' %>
   <% end %>
