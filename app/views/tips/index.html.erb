@@ -1,22 +1,11 @@
 <div class="page-header">
-  <h1>
-    Tip <%= @client.name %>
+  <h1 class="client-header">
+    <%= @client.name %>
   </h1>
 </div>
 
-<% if @stripe_card.errors.any? %>
-  <div class="alert alert-error">
-     <button type="button" class="close">×</button>
-    <ul>
-      <% @stripe_card.errors.each do |m, v| %>
-      <li><%= m %>: <%= v %></li>
-      <% end %>
-    </ul>
-  </div>
-<% end %>
-
 <div class="tabbable">
-  <ul class="nav nav-tabs nav-pills">
+  <ul class="nav nav-tabs nav-pills thin">
     <li class="active"><a href="#stripe" data-toggle="tab">Credit Card</a></li>
     <li><a href="#bitcoins" data-toggle="tab">Bitcoins</a> </li>
     <li><a href="#paypal" data-toggle="tab">Paypal</a> </li>

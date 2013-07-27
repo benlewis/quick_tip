@@ -7,7 +7,6 @@
 
     <%= stylesheet_link_tag    "application", :media => "all" %>
     <%= javascript_include_tag "application" %>
-    <%= javascript_include_tag "tip" %>
     <%= csrf_meta_tags %>
 
     <!-- Fav and touch icons -->
@@ -20,9 +19,11 @@
   </head>
 
   <body>
-    <div class="container"><div class="row">
-       <div class="span12 column">
-         <%= yield %>
+    <div class="container">
+      <div class="row">
+        <div class="span6 column offset3 tip-content">
+          <%= yield %>
+        </div>
       </div>
     </div>
   </body>
