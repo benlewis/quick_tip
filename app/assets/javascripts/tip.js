@@ -26,24 +26,60 @@ $(function(){
     }
   }
 
-  $('.dollar')
-
-
   $('#other-input').keyup(function() {
     var hidden  = $('#charge-amount');
-    hidden.val($(this).val() * 100).trigger('change');
+    hidden.val($(this).val() * 100);
+    console.log('ku');
   }).blur(function() {
+    console.log('bu');
+
     var hidden  = $('#charge-amount');
-    hidden.val($(this).val() * 100).trigger('change');
+    var new_val = $(this).val();
+    var min     = $(this).attr('min');
+    var max     = $(this).attr('max');
+    if (new_val < min) {
+      show_qtip($(this));
+      new_val = min;
+    } else if (new_val > max) {
+      show_qtip($(this));
+      new_val = max;
+    }
+    hidden.val(new_val * 100);
+    $(this).val(new_val);
     $(this).formatCurrency();
     $(this).formatCurrency('.currencyLabel');
   }).focus(function () {
+    console.log('fc');
     $(this).val('');
   });
 
-  $('#charge-amount').change(function() {
-    console.log('Charge amount changed to ' + $(this).val());
-  });
+  function create_qtip(input, min, max) {
+    input.qtip({
+      content: 'Donate $' + min + ' - $' + max,
+      position: {
+        my: 'bottom center',
+        at: 'top center'
+      },
+      show: {
+        ready: false
+      },
+      style: {
+        classes: 'qtip-light'
+      }
+    });
+  }
+
+  function show_qtip(input) {
+    input.qtip('api').set({
+      'style.classes': 'qtip-red',
+      'show.ready': true
+    });
+  }
+
+  function hide_qtip(input) {
+    input.qtip({ show: { ready: false }});
+  }
+
 
   $('#charge-amount-selector').children('a').each(function(){
     var button  = $(this);
@@ -54,7 +90,6 @@ $(function(){
     var value   = $(button).attr('data-value');
 
     button.click(function() {
-      console.log('Clicked ' + value);
       hidden.val(value).trigger('change');
 
       group.children('a').each(function() {
@@ -65,16 +100,33 @@ $(function(){
         }
       })
 
-      input = $('#other-input');
+      var input = $('#other-input');
       if (value.indexOf("-") != -1) { //Other
-        parts = value.split('-');
-        input.attr('min', parts[0]);
-        input.val(parts[1] / 100); //default
-        input.attr('max', parts[2]);
+        var parts = value.split('-');
+
+        var min = parts[0];
+        var default_val = parts[1];
+        var max = parts[2];
+
+        input.attr('min', min);
+        input.val(default_val);
+        input.attr('max', max);
+
+        if (!input.qtip('api')) {
+          create_qtip(input, min, max);
+        } else {
+          input.qtip('api').set({
+            'style.classes': 'qtip-light',
+          });
+        }
+
         input.formatCurrency();
         input.formatCurrency('.currencyLabel');
         input.css('display', 'inline');
+        input.focus();
+        input.qtip('api').show();
       } else {
+        input.qtip('api').hide();
         input.css('display', 'none');
       }
     });
