@@ -11,7 +11,7 @@
         <a class="btn" data-value="1000">$10</a>
         <a class="btn" data-value="1-10-50">Other</a>
       </span>
-      <input type="text" class="input-mini dollar" id="other-input" placeholder="5.00" type="number" pattern="[\d]*" min="1" max="50" /></span>
+      <input type="text" class="input-mini dollar" id="other-input" placeholder="5.00" type="number" pattern="[0-9]*" min="1" max="50" /></span>
       <input type="hidden" id="charge-amount" name="charge_amount" value="500" />
     </div>
 
@@ -24,7 +24,7 @@
         <%= image_tag 'credit_cards/discover.png', :id => 'discover', :class => 'cc_img' %>
       </span>
     </p>
-    <%= f.text_field :credit_card_number, :class => 'cc-number', :pattern => '[\d|\s]*', 'autocompletetype' => "cc-number", :placeholder => "Card number", :required => true %></p>
+    <%= f.text_field :credit_card_number, :class => 'cc-number', :pattern => '[0-9]*', 'autocompletetype' => "cc-number", :placeholder => "Card number", :required => true %></p>
     <p class="form-field">Expiration: <%= f.text_field :expiration, :class => 'cc-exp', :placeholder => '01 / 2011' %></p>
 
     <%= f.submit 'Tip!', :class => 'btn btn-primary' %>

@@ -29,10 +29,7 @@ $(function(){
   $('#other-input').keyup(function() {
     var hidden  = $('#charge-amount');
     hidden.val($(this).val() * 100);
-    console.log('ku');
   }).blur(function() {
-    console.log('bu');
-
     var hidden  = $('#charge-amount');
     var new_val = $(this).val();
     var min     = $(this).attr('min');
@@ -74,10 +71,14 @@ $(function(){
       'style.classes': 'qtip-red',
       'show.ready': true
     });
+    setTimeout(hide_qtip,1000);
   }
 
-  function hide_qtip(input) {
-    input.qtip({ show: { ready: false }});
+  function hide_qtip() {
+    input = $('#other-input');
+    if (input.qtip('api')) {
+      input.qtip('api').hide();
+    }
   }
 
 
@@ -90,6 +91,7 @@ $(function(){
     var value   = $(button).attr('data-value');
 
     button.click(function() {
+      hide_qtip();
       hidden.val(value).trigger('change');
 
       group.children('a').each(function() {
